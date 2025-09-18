@@ -1,0 +1,5 @@
+client,contract_end,contract_value,auto_renew,notice_required_days
+Acme Manufacturing,2024-07-30,131616,True,30
+Brightside Retail,2024-10-28,101208,False,45
+Northwind Legal,2025-01-26,131550,False,30
+Skyline Nonprofit,2025-04-26,102072,False,60
