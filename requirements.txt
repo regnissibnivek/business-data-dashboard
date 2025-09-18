@@ -1,0 +1,6 @@
+dash>=2.16
+plotly>=5.18
+pandas>=2.3
+numpy>=1.26
+typer>=0.12
+pytest>=8.3
