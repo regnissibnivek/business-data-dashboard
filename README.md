@@ -64,3 +64,18 @@ pytest
 ```
 
 The tests exercise the KPI calculations, health scoring, and forecasting utilities to make sure they stay in sync with the sample data set.
+
+## Forecast edge cases
+
+An empty selection returns an empty forecast with the expected columns. With
+one observed month, the forecast repeats that month's total as a simple baseline;
+with multiple months, it retains the existing linear trend. A zero-month horizon
+returns an empty result, and negative horizons raise `ValueError`.
+
+Run the focused regression checks without starting the web app:
+
+```bash
+python -m unittest discover -s tests -p test_forecasting_edge_cases.py -v
+```
+
+The development entrypoint uses `app.run`, compatible with Dash 3.

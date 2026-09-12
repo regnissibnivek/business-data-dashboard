@@ -6,8 +6,13 @@ import pandas as pd
 
 
 def _linear_forecast(values: pd.Series, periods: int) -> pd.Series:
-    if values.empty:
+    if periods < 0:
+        raise ValueError("periods must be non-negative")
+    if values.empty or periods == 0:
         return pd.Series(dtype=float)
+
+    if len(values) == 1:
+        return pd.Series(float(values.iloc[0]), index=np.arange(1, periods + 1))
 
     y = values.values.astype(float)
     x = np.arange(len(y))
@@ -25,7 +30,9 @@ def forecast_recurring_revenue(financials: pd.DataFrame, periods: int = 3) -> pd
         .sort_values("month")
     )
     forecast = _linear_forecast(trend["recurring_revenue"], periods)
-    last_month = trend["month"].max() if not trend.empty else pd.Timestamp.today()
+    if forecast.empty:
+        return trend.iloc[:0].copy()
+    last_month = trend["month"].max()
     future_months = pd.date_range(last_month + pd.offsets.MonthBegin(), periods=periods, freq="MS")
     return pd.DataFrame({"month": future_months, "recurring_revenue": forecast.values})
 
@@ -38,6 +45,8 @@ def forecast_ticket_volume(tickets: pd.DataFrame, periods: int = 3) -> pd.DataFr
         .sort_values("month")
     )
     forecast = _linear_forecast(trend["tickets_opened"], periods)
-    last_month = trend["month"].max() if not trend.empty else pd.Timestamp.today()
+    if forecast.empty:
+        return trend.iloc[:0].copy()
+    last_month = trend["month"].max()
     future_months = pd.date_range(last_month + pd.offsets.MonthBegin(), periods=periods, freq="MS")
     return pd.DataFrame({"month": future_months, "tickets_opened": forecast.values})
